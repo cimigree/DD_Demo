@@ -1,17 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import * as Location from 'expo-location';
 
 const App = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [updatedLocation, setUpdatedLocation] = useState(null);
-  // const [timestamp, setTimestamp] = useState(null);
+  const timestampRef = useRef(Date.now());
 
   useEffect(() => {
     (async () => {
-      let timestamp;
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
@@ -19,18 +17,21 @@ const App = () => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      setLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
 
       Location.watchPositionAsync({}, (locationObject) => {
-        if (locationObject && timestamp === null) {
-          timestamp = locationObject.timestamp;
-        } else if (
-          locationObject &&
-          timestamp &&
-          locationObject.timestamp - 2000 > timestamp
-        ) {
-          timestamp = locationObject.timestamp;
-          setUpdatedLocation(locationObject);
+        if (locationObject) {
+          if (locationObject.timestamp - timestampRef.current > 2000) {
+            setLocation((prevState) => ({
+              ...prevState,
+              latitude: locationObject.coords.latitude,
+              longitude: locationObject.coords.longitude,
+            }));
+            timestampRef.current = locationObject.timestamp;
+          }
         }
       });
     })();
@@ -45,14 +46,10 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      {updatedLocation ? (
+      {location ? (
         <>
-          <Text style={styles.paragraph}>
-            Latitude: {updatedLocation.coords.latitude}
-          </Text>
-          <Text style={styles.paragraph}>
-            Longitude: {updatedLocation.coords.longitude}
-          </Text>
+          <Text style={styles.paragraph}>Latitude: {location.latitude}</Text>
+          <Text style={styles.paragraph}>Longitude: {location.longitude}</Text>
         </>
       ) : (
         <Text>Waiting for Location</Text>
