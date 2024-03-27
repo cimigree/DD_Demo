@@ -1,17 +1,31 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import * as Location from 'expo-location';
 import CheapRuler from 'cheap-ruler';
 
-export const useLocation = () => {
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const timestampRef = useRef(Date.now());
+type LocationObject = {
+  latitude: number;
+  longitude: number;
+};
 
-  const calculateDistance = (cheapRuler, stateLocation, returnedLocation) => {
+type Nullable<T> = T | null;
+
+export const useLocation = () => {
+  const [location, setLocation] = useState<Nullable<LocationObject>>(null);
+  const [errorMsg, setErrorMsg] = useState<Nullable<string>>(null);
+  const timestampRef = useRef<number>(Date.now());
+
+  const calculateDistance = (
+    cheapRuler: CheapRuler,
+    stateLocation: Nullable<LocationObject>,
+    returnedLocation: Location.LocationObject,
+  ): number => {
     let change = 0;
     if (stateLocation !== null) {
-      const oldPoint = [stateLocation.longitude, stateLocation.latitude];
-      const newPoint = [
+      const oldPoint: [number, number] = [
+        stateLocation.longitude,
+        stateLocation.latitude,
+      ];
+      const newPoint: [number, number] = [
         returnedLocation.coords.longitude,
         returnedLocation.coords.latitude,
       ];
@@ -21,7 +35,7 @@ export const useLocation = () => {
   };
 
   useEffect(() => {
-    let positionWatcher = null;
+    let positionWatcher: Location.LocationSubscription | null = null;
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {

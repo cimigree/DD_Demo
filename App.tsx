@@ -2,7 +2,17 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { useLocation } from './hooks/useLocation';
 
-const App = () => {
+interface Location {
+  latitude: number;
+  longitude: number;
+}
+
+interface UseLocationReturn {
+  location?: Location;
+  errorMsg?: string;
+}
+
+const App: React.FC = () => {
   const { location, errorMsg } = useLocation();
   if (errorMsg) {
     return (
@@ -15,9 +25,11 @@ const App = () => {
       <View style={styles.container}>
         {location ? (
           <>
-            <Text style={styles.paragraph}>Latitude: {location.latitude}</Text>
             <Text style={styles.paragraph}>
-              Longitude: {location.longitude}
+              Latitude: {location['latitude']}
+            </Text>
+            <Text style={styles.paragraph}>
+              Longitude: {location['longitude']}
             </Text>
           </>
         ) : (
