@@ -1,79 +1,33 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Description
 
-# Getting Started
+The purpose of this interview is to assess your technical capabilities and skills. We would like to see how you code, your working style, and how you go about solving problems. We do not want you to do much coding ahead of time, as we would like you to discuss what you are doing while we all work on it together. Please do [set up your development environment ahead of time](https://reactnative.dev/docs/environment-setup?guide=native&platform=ios), and make sure your iPhone simulator is running.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+During the interview, these are the particular skills that we will be looking out for:
 
-## Step 1: Start the Metro Server
+- General React knowledge, in particular managing state and side effects.
+- Familiarity with React Native tooling, including Expo and Xcode/podman.
+- Familiarity with expo build services.
+- Git skills including rebasing, merging, and resolving conflicts.
+- Documentation skills - we want to make sure that processes and systems created are clearly documented for other to use. We recognize that english may not be your first language, so we are not looking for correct grammar or vocabulary. We simply are looking for whether the steps are documented in a way that another developer can understand and re-create your work.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+This technical part of the interview will be 60-70 mins. You do not have to finish all of the assignment. It is more valuable for us to understand how you approach each step, then trying to rush and finish all the tasks. If there are certain things we do not get to, we will have time to discuss how you would approach those problems.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+# The Task
 
-```bash
-# using npm
-npm start
+More details about the task will be shared during the interview. These are the main aspects we will be testing.
 
-# OR using Yarn
-yarn start
-```
+1. We will be setting up a native Expo-Module, and using that module to present some information to the user. This app is a [bare react native app](https://docs.expo.dev/bare/overview/) and therfore requires some configuration in order to use Expo Modules. Please do not do the configuration ahead of time, as we would like to see how you do this.
 
-## Step 2: Start your Application
+2. React State Management. We will be taking state, external from the react code, and merging it with react state. We are looking for how well you are able to optimize the code, your understanding of declarative code patterns, and clarity of code.
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+3. E2e Tests. Create e2e tests to simulate the task we do. These tests should be documented using JSDoc. These e2e test will use Jest and Detox (which are already set up for this project).
 
-### For Android
+# Instructions
 
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- [ ] Configure Expo to run on iOs, following [manual installation](https://docs.expo.dev/bare/installing-expo-modules/#manual-installation).
+- [ ] Install [Expo Location](https://docs.expo.dev/versions/latest/sdk/location/)
+- [ ] Create a hook that subscribes to the location of the user. 
+- [ ] Optimize the hook: Subscribing to the location can lead to many re-renders in react, as it is constanstly changing due to micro-movements and increasing accuracy. Optimize this hook so that it is debounced and only updates the location every 2 seconds OR update the location when the user has moved more than 15m. You can use [Cheap Ruler](https://www.npmjs.com/package/cheap-ruler) to measure the distance.
+- [ ] Print the `lat and lon` on the phone.
+- [ ] Write e2e test to reflect what you have just done.
+- [ ] Configure e2e tests to run on [Eas Build](https://docs.expo.dev/build-reference/e2e-tests/)
