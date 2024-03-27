@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 
 import * as Location from 'expo-location';
+import CheapRuler from 'cheap-ruler';
 
 const App = () => {
   const [location, setLocation] = useState(null);
@@ -16,15 +17,27 @@ const App = () => {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
+      const currentLocation = await Location.getCurrentPositionAsync({});
       setLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
       });
-
+      let calculatedDistance = 0;
+      const ruler = new CheapRuler(currentLocation.coords.latitude, 'meters');
       Location.watchPositionAsync({}, (locationObject) => {
-        if (locationObject) {
-          if (locationObject.timestamp - timestampRef.current > 2000) {
+        if (locationObject !== null) {
+          if (location !== null) {
+            const oldPoint = [location.longitude, location.latitude];
+            const newPoint = [
+              locationObject.coords.longitude,
+              locationObject.coords.latitude,
+            ];
+            calculatedDistance = ruler.distance(oldPoint, newPoint);
+          }
+          if (
+            locationObject.timestamp - timestampRef.current > 2000 ||
+            calculatedDistance > 15
+          ) {
             setLocation((prevState) => ({
               ...prevState,
               latitude: locationObject.coords.latitude,
