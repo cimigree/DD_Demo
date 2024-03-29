@@ -59,7 +59,7 @@ export const useLocation = () => {
               locationObject,
             );
             if (
-              locationObject.timestamp - timestampRef.current > 2000 ||
+              locationObject.timestamp - timestampRef.current >= 2000 ||
               calculatedDistance > 15
             ) {
               setLocation((prevState) => ({

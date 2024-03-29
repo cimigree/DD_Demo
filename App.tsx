@@ -25,12 +25,8 @@ const App: React.FC = () => {
       <View style={styles.container}>
         {location ? (
           <>
-            <Text style={styles.paragraph}>
-              Latitude: {location['latitude']}
-            </Text>
-            <Text style={styles.paragraph}>
-              Longitude: {location['longitude']}
-            </Text>
+            <Text style={styles.paragraph}>Lat: {location['latitude']}</Text>
+            <Text style={styles.paragraph}>Lon: {location['longitude']}</Text>
           </>
         ) : (
           <Text>Waiting for Location</Text>
