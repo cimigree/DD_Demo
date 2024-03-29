@@ -13,24 +13,23 @@ export const useLocation = () => {
   const [location, setLocation] = useState<Nullable<LocationObject>>(null);
   const [errorMsg, setErrorMsg] = useState<Nullable<string>>(null);
   const timestampRef = useRef<number>(Date.now());
+  const latitudeRef = useRef<number>(0);
+  const longitudeRef = useRef<number>(0);
 
   const calculateDistance = (
     cheapRuler: CheapRuler,
-    stateLocation: Nullable<LocationObject>,
     returnedLocation: Location.LocationObject,
   ): number => {
     let change = 0;
-    if (stateLocation !== null) {
-      const oldPoint: [number, number] = [
-        stateLocation.longitude,
-        stateLocation.latitude,
-      ];
-      const newPoint: [number, number] = [
-        returnedLocation.coords.longitude,
-        returnedLocation.coords.latitude,
-      ];
-      change = cheapRuler.distance(oldPoint, newPoint);
-    }
+    const oldPoint: [number, number] = [
+      longitudeRef.current,
+      latitudeRef.current,
+    ];
+    const newPoint: [number, number] = [
+      returnedLocation.coords.longitude,
+      returnedLocation.coords.latitude,
+    ];
+    change = cheapRuler.distance(oldPoint, newPoint);
     return change;
   };
 
@@ -53,21 +52,18 @@ export const useLocation = () => {
         { accuracy: Location.Accuracy.BestForNavigation },
         (locationObject) => {
           if (locationObject !== null) {
-            const calculatedDistance = calculateDistance(
-              ruler,
-              location,
-              locationObject,
-            );
+            const calculatedDistance = calculateDistance(ruler, locationObject);
             if (
               locationObject.timestamp - timestampRef.current >= 2000 ||
               calculatedDistance > 15
             ) {
-              setLocation((prevState) => ({
-                ...prevState,
+              setLocation({
                 latitude: locationObject.coords.latitude,
                 longitude: locationObject.coords.longitude,
-              }));
+              });
               timestampRef.current = locationObject.timestamp;
+              latitudeRef.current = locationObject.coords.latitude;
+              longitudeRef.current = locationObject.coords.longitude;
             }
           }
         },
@@ -79,6 +75,5 @@ export const useLocation = () => {
       }
     };
   }, []);
-
   return { location, errorMsg };
 };
